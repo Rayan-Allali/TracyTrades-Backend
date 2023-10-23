@@ -1,0 +1,39 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Dish {
+  dishId: Float!
+  name: String!
+  cookingTime: Float!
+  imgUrl: String
+  catId: Float!
+}
+
+type Category {
+  catId: Float
+  name: String!
+  dishes: [Dish!]
+}
+
+type Query {
+  Categories: [Category!]!
+  category(categoryId: Float!): Category!
+  dishes: [Dish!]!
+  dish(dishId: Int!): Dish!
+}
+
+type Mutation {
+  addCategory(input: CreateCategoryInput!): Category!
+  addDish(input: DishAddInput!): Dish!
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input DishAddInput {
+  name: String!
+  cookingTime: Float!
+  catId: Float!
+}
