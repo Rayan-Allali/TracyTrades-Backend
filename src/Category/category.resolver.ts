@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Args, Int, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Dish } from 'src/dish/dish.model';
 import { EntityNotFoundException } from 'src/filters/entity-notfound-error';
 import { Category } from './category.model';
@@ -26,13 +26,35 @@ export class CategoryResolver {
     }
   }
   
-  @Mutation(()=>Category ,{name:"addCategory"})
-  async add(
-    @Args('input',{type:()=>CreateCategoryInput})
+  @Mutation(()=>Category ,{name:"createCategory"})
+  async createCategory(
+    @Args('createCategoryData')
     category:CreateCategoryInput
   ):Promise<Category>{
     const newCategory = await this.service.createCategory(category)
     return newCategory
+  }
+
+  @Mutation(()=>Category ,{name:"updateCategory"})
+  async updateCategory(
+    @Args() getCategoryArgs:GetCategoryArgs,
+    @Args('updateCategoryData')
+    category:CreateCategoryInput
+  ):Promise<Category>{
+    const newCategory = await this.service.updateCategory(getCategoryArgs.categoryId, category)
+    if(!newCategory){
+      throw new EntityNotFoundException('catrgory', getCategoryArgs.categoryId)
+    }
+    return newCategory
+  }
+
+  @Mutation(()=>Int , {name:"deleteCategory"})
+  async deleteCategory(@Args() getCategoryArgs:GetCategoryArgs):Promise<number>{
+    const deletedCategory = await this.service.deleteCategory(getCategoryArgs.categoryId)
+    if(!deletedCategory){
+      throw new EntityNotFoundException('catrgory', getCategoryArgs.categoryId)
+    }
+    return deletedCategory.catId
   }
   @ResolveField("dishes")
   async dishes(
