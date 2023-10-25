@@ -8,6 +8,7 @@ type Dish {
   cookingTime: Float!
   imgUrl: String
   catId: Float!
+  category: Category!
 }
 
 type Category {
@@ -20,22 +21,30 @@ type Query {
   Categories: [Category!]!
   category(categoryId: Float!): Category!
   dishes: [Dish!]!
-  dish(dishId: Int!): Dish!
+  dish(dishId: Float!): Dish!
 }
 
 type Mutation {
   createCategory(createCategoryData: CreateCategoryInput!): Category!
   updateCategory(categoryId: Float!, updateCategoryData: CreateCategoryInput!): Category!
   deleteCategory(categoryId: Float!): Int!
-  addDish(input: DishAddInput!): Dish!
+  createDish(dish: CreateDishInput!): Dish!
+  updateDish(dishId: Float!, dish: UpdateDishInput!): Dish!
+  deleteDish(dishId: Float!): Int!
 }
 
 input CreateCategoryInput {
   name: String!
 }
 
-input DishAddInput {
+input CreateDishInput {
   name: String!
   cookingTime: Float!
   catId: Float!
+}
+
+input UpdateDishInput {
+  name: String
+  cookingTime: Float
+  catId: Float
 }
