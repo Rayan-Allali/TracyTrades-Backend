@@ -24,7 +24,9 @@ type Query {
 }
 
 type Mutation {
-  addCategory(input: CreateCategoryInput!): Category!
+  createCategory(createCategoryData: CreateCategoryInput!): Category!
+  updateCategory(categoryId: Float!, updateCategoryData: CreateCategoryInput!): Category!
+  deleteCategory(categoryId: Float!): Int!
   addDish(input: DishAddInput!): Dish!
 }
 
