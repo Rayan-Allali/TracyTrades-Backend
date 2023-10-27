@@ -8,6 +8,7 @@ type Dish {
   cookingTime: Float!
   imgUrl: String
   catId: Float!
+  category: Category!
 }
 
 type Category {
@@ -16,26 +17,63 @@ type Category {
   dishes: [Dish!]
 }
 
+type Ingredient {
+  ingrId: Float!
+  name: String!
+  unitM: String!
+  type: String!
+  imgUrl: String!
+}
+
 type Query {
   Categories: [Category!]!
   category(categoryId: Float!): Category!
   dishes: [Dish!]!
-  dish(dishId: Int!): Dish!
+  dish(dishId: Float!): Dish!
+  ingredients: [Ingredient!]!
+  ingredient(ingrId: Float!): Ingredient!
 }
 
 type Mutation {
   createCategory(createCategoryData: CreateCategoryInput!): Category!
   updateCategory(categoryId: Float!, updateCategoryData: CreateCategoryInput!): Category!
   deleteCategory(categoryId: Float!): Int!
-  addDish(input: DishAddInput!): Dish!
+  createDish(dish: CreateDishInput!): Dish!
+  updateDish(dishId: Float!, dish: UpdateDishInput!): Dish!
+  deleteDish(dishId: Float!): Int!
+  createIngredient(ingredient: CreateIngredientInput!): Ingredient!
+  updateIngredient(ingrId: Float!, ingredient: UpdateIngredientInput!): Ingredient!
+  deleteIngredient(ingrId: Float!): Int!
 }
 
 input CreateCategoryInput {
   name: String!
 }
 
-input DishAddInput {
+input CreateDishInput {
   name: String!
   cookingTime: Float!
   catId: Float!
+}
+
+input UpdateDishInput {
+  name: String
+  cookingTime: Float
+  catId: Float
+}
+
+input CreateIngredientInput {
+  name: String!
+  description: String!
+  unitM: String!
+  type: String!
+  imgUrl: String!
+}
+
+input UpdateIngredientInput {
+  name: String
+  description: String
+  unitM: String
+  type: String
+  imgUrl: String
 }

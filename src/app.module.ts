@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { CategoryModule } from './Category/category.module';
 import { DishModule } from './dish/dish.module';
+import { IngredientModule } from './ingredient/ingredient.module';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -12,6 +13,7 @@ import { DishModule } from './dish/dish.module';
     }),
     CategoryModule,
     DishModule,
+    IngredientModule,
   ],
   controllers: [],
   providers: [],

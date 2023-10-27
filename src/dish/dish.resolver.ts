@@ -1,52 +1,65 @@
-import { Query, Resolver, Args, Int, Mutation } from '@nestjs/graphql';
+/* eslint-disable prettier/prettier */
+import {
+  Query,
+  Resolver,
+  Args,
+  Int,
+  Mutation,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
+import { Category } from 'src/Category/category.model';
 import { EntityNotFoundException } from 'src/filters/entity-notfound-error';
-import { PrismaService } from '../prisma.service';
+import { GetDishArgs } from './args/get-dish.args';
 import { Dish } from './dish.model';
-import { DishAddInput } from './input/dish-add.input';
+import { DishService } from './dish.service';
+import { CreateDishInput } from './input/create-dish.input';
+import { UpdateDishInput } from './input/update-dish.input';
 
-@Resolver()
+@Resolver(() => Dish)
 export class DishResolver {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly service: DishService) {}
 
   @Query(() => [Dish])
   async dishes(): Promise<Dish[]> {
-    const dishes = await this.prisma.dish.findMany();
+    const dishes = await this.service.dishes();
+    if (!dishes) return [];
     return dishes;
   }
 
   @Query(() => Dish)
-  async dish(@Args('dishId', { type: () => Int }) id: number): Promise<Dish> {
-    const dish = await this.prisma.dish.findUniqueOrThrow({
-      where: {
-        dishId: id,
-      },
-    });
-    if (!dish) {
-      throw new EntityNotFoundException('dish', id);
-    }
+  async dish(@Args() getDishArgs: GetDishArgs): Promise<Dish> {
+    const dish = await this.service.dish(getDishArgs.dishId);
+    if (!dish) throw new EntityNotFoundException('dish', getDishArgs.dishId);
     return dish;
   }
 
-  @Mutation(() => Dish, { name: 'addDish' })
-  async add(
-    @Args('input', { type: () => DishAddInput })
-    dish: DishAddInput,
+  @Mutation(() => Dish)
+  async createDish(@Args('dish') newDish: CreateDishInput): Promise<Dish> {
+    const dish = await this.service.createDish(newDish);
+    return dish;
+  }
+  @Mutation(() => Dish)
+  async updateDish(
+    @Args() getDishArgs: GetDishArgs,
+    @Args('dish') updateDish: UpdateDishInput,
   ): Promise<Dish> {
-    const category = await this.prisma.category.findUnique({
-      where: {
-        catId: dish.catId,
-      },
-    });
-    if (!category) {
-      throw new EntityNotFoundException('category', dish.catId);
-    }
-    const newDish = await this.prisma.dish.create({
-      data: {
-        name: dish.name,
-        cookingTime: dish.cookingTime,
-        catId: dish.catId,
-      },
-    });
-    return newDish;
+    const updatedDish = await this.service.updateDish(
+      getDishArgs.dishId,
+      updateDish,
+    );
+    return updatedDish;
+  }
+
+  @Mutation(() => Int)
+  async deleteDish(@Args() getDishArgs: GetDishArgs): Promise<number> {
+    const dish = await this.service.deleteDish(getDishArgs.dishId);
+    if (!dish) throw new EntityNotFoundException('dish', getDishArgs.dishId);
+    return dish.dishId;
+  }
+  @ResolveField('category', () => Category)
+  async dishCategory(@Parent() dish: Dish): Promise<Category> {
+    const category = await this.service.getDishCategory(dish.catId);
+    return category;
   }
 }

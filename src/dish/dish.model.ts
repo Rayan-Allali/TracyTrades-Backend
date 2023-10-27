@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Category } from 'src/Category/category.model';
 
 @ObjectType()
 export class Dish{
@@ -13,4 +14,6 @@ export class Dish{
   imgUrl: string;
   @Field()
   catId: number;
+  @Field(() => Category,{ nullable: true })
+  category?: Category;
 }
