@@ -17,11 +17,21 @@ type Category {
   dishes: [Dish!]
 }
 
+type Ingredient {
+  ingrId: Float!
+  name: String!
+  unitM: String!
+  type: String!
+  imgUrl: String!
+}
+
 type Query {
   Categories: [Category!]!
   category(categoryId: Float!): Category!
   dishes: [Dish!]!
   dish(dishId: Float!): Dish!
+  ingredients: [Ingredient!]!
+  ingredient(ingrId: Float!): Ingredient!
 }
 
 type Mutation {
@@ -31,6 +41,9 @@ type Mutation {
   createDish(dish: CreateDishInput!): Dish!
   updateDish(dishId: Float!, dish: UpdateDishInput!): Dish!
   deleteDish(dishId: Float!): Int!
+  createIngredient(ingredient: CreateIngredientInput!): Ingredient!
+  updateIngredient(ingrId: Float!, ingredient: UpdateIngredientInput!): Ingredient!
+  deleteIngredient(ingrId: Float!): Int!
 }
 
 input CreateCategoryInput {
@@ -47,4 +60,20 @@ input UpdateDishInput {
   name: String
   cookingTime: Float
   catId: Float
+}
+
+input CreateIngredientInput {
+  name: String!
+  description: String!
+  unitM: String!
+  type: String!
+  imgUrl: String!
+}
+
+input UpdateIngredientInput {
+  name: String
+  description: String
+  unitM: String
+  type: String
+  imgUrl: String
 }

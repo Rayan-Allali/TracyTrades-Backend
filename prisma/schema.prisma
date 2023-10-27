@@ -31,12 +31,12 @@ model dishIngredient{
   qte String
 }
 model dish{
-dishId Int @id @default(autoincrement())
-name String
-description String
-cookingTime Int
-catId Int
-category category @relation(fields: [catId],references: [catId])
-imgUrl String?
-dishIngredients dishIngredient[]
+  dishId Int @id @default(autoincrement())
+  name String
+  description String
+  cookingTime Int
+  catId Int
+  category category @relation(fields: [catId],references: [catId])
+  imgUrl String?
+  dishIngredients dishIngredient[]
 }

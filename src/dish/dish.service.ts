@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Category } from 'src/Category/category.model';
 import { EntityNotFoundException } from 'src/filters/entity-notfound-error';
